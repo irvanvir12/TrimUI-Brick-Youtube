@@ -1,12 +1,12 @@
 YouTubeChannels.pak
-Lightweight YouTube browser for TrimUI Brick devices
+Lightweight YouTube browser for TrimUI devices
 
 ==================================================
 DESCRIPTION
 ==================================================
 
 YouTubeChannels.pak is a lightweight YouTube browser designed
-for TrimUI Brick handheld devices. It supports video search,
+for TrimUI handheld devices. It supports video search,
 channel subscriptions, streaming via MPV, and downloading
 videos directly to your SD card.
 
