@@ -63,14 +63,11 @@ add_channel() {
         channel=$(./keyboard minui.ttf)
         kb_status=$?
 
-        # 🔥 B EXIT → balik ke tools menu
         [ $kb_status -ne 0 ] && return 1
-
         [ -z "$channel" ] && continue
 
         channel=$(normalize_channel "$channel")
 
-        # 🚫 Anti duplicate
         grep -iq "^$channel$" "$CHANNELS_FILE" 2>/dev/null && {
             ./show_message "Channel Already Exists" -l a
             continue
@@ -217,10 +214,13 @@ search_video() {
 }
 
 ###############################################################################
+# 🔥 CHANNEL ICON VERSION
+###############################################################################
 create_channels_menu() {
 
     > /tmp/channels_menu.txt
-    echo "Search Video|search|action" >> /tmp/channels_menu.txt
+
+    echo "🔎 Search Video|search|action" >> /tmp/channels_menu.txt
 
     [ ! -s "$CHANNELS_FILE" ] && return
 
@@ -228,11 +228,11 @@ create_channels_menu() {
 
         [ -z "$channel" ] && continue
 
-        # 🔥 Remove @ untuk tampilan
+        # display name tanpa @ + auto spasi CamelCase
         display=$(echo "$channel" | sed 's/@//' | sed 's/\([a-z]\)\([A-Z]\)/\1 \2/g')
 
-        # tampilkan nama cantik tapi simpan handle asli
-        echo "$display|$channel|channel" >> /tmp/channels_menu.txt
+        # 📺 ICON CHANNEL
+        echo "📺 $display|$channel|channel" >> /tmp/channels_menu.txt
 
     done < "$CHANNELS_FILE"
 }
@@ -247,7 +247,7 @@ main() {
         picker_output=$(./picker /tmp/channels_menu.txt -y "TOOLS" -b "EXIT" -a "SELECT")
         status=$?
 
-        # 🔥 Y button → Tools Menu
+        # 🎮 Y BUTTON = TOOLS
         [ $status -eq 4 ] && {
             open_tools_menu
             continue
