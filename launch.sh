@@ -70,16 +70,28 @@ add_channel() {
 
 ###############################################################################
 remove_channel() {
+
     [ ! -s "$CHANNELS_FILE" ] && {
         ./show_message "No Channel Found" -l a
         return
     }
 
-    cp "$CHANNELS_FILE" /tmp/remove_list.txt
+    > /tmp/remove_list.txt
+
+    # Tampilkan tanpa @ dan dengan spasi CamelCase
+    while read -r channel; do
+        [ -z "$channel" ] && continue
+        display=$(echo "$channel" | sed 's/@//' | sed 's/\([a-z]\)\([A-Z]\)/\1 \2/g')
+        echo "$display|$channel" >> /tmp/remove_list.txt
+    done < "$CHANNELS_FILE"
+
     choice=$(./picker /tmp/remove_list.txt -b "BACK" -a "REMOVE")
     [ $? -ne 0 ] && return
 
-    grep -iv "^$choice$" "$CHANNELS_FILE" > /tmp/ch_tmp.txt
+    # Ambil nama asli (dengan @)
+    original=$(echo "$choice" | cut -d'|' -f2)
+
+    grep -iv "^$original$" "$CHANNELS_FILE" > /tmp/ch_tmp.txt
     mv /tmp/ch_tmp.txt "$CHANNELS_FILE"
 
     ./show_message "Channel Removed" -l a
