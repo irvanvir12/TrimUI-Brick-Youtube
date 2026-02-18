@@ -2,3 +2,4 @@ build/
 *.zip
 build.sh
 launch_dev.sh
+cookies.txt
